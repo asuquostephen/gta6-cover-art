@@ -3,7 +3,9 @@
 // drawing: a multi-panel collage in the spirit of big-city crime-movie posters, a colour grade
 // from the chosen preset, optional halftone dots and comic edge darkening, then the caption in
 // heavy condensed lettering across the top. Everything is drawn with canvas primitives and the
-// visitor's own photos — no artwork, logo or font file from anyone else's game.
+// visitor's own photos — no artwork, logo or font file from anyone else's game. The last pass
+// over the sheet is a finish: a soft vignette plus a deterministic film grain, so the flat
+// digital colour reads as a printed poster.
 
 import { PRESETS } from './presets.js';
 
@@ -91,6 +93,68 @@ function drawPanelShade(ctx, rect) {
   ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
 }
 
+/** A fixed-seed PRNG (mulberry32): the grain must come out identical on every render, so the
+ *  poster a visitor exports is the poster they saw, whatever machine or moment it is drawn in. */
+function seededRandom(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+let grainTile = null;
+/** A square of per-pixel grey noise, drawn once and then tiled as a pattern: the film grain. */
+function getGrainTile() {
+  if (grainTile) return grainTile;
+  const size = 256;
+  const tile = document.createElement('canvas');
+  tile.width = size;
+  tile.height = size;
+  const tctx = tile.getContext('2d');
+  const data = tctx.createImageData(size, size);
+  const rand = seededRandom(0x9e3779b9);
+  for (let i = 0; i < data.data.length; i += 4) {
+    const v = Math.floor(rand() * 256);
+    data.data[i] = v;
+    data.data[i + 1] = v;
+    data.data[i + 2] = v;
+    data.data[i + 3] = 255;
+  }
+  tctx.putImageData(data, 0, 0);
+  grainTile = tile;
+  return tile;
+}
+
+/**
+ * The finish pass, painted last over the whole graded poster — lettering included, the
+ * editor's dashed highlight excluded: a soft vignette pulls the corners down, then a whisper
+ * of film grain is tiled over everything in overlay blend. Neither half looks at the preset
+ * (fixed gradient stops, fixed grain seed), so the finish sits the same on all five grades.
+ */
+function drawFinish(ctx, w, h) {
+  const cx = w / 2;
+  const cy = h / 2;
+  const vignette = ctx.createRadialGradient(cx, cy, Math.min(w, h) * 0.42, cx, cy, Math.hypot(w, h) / 2);
+  vignette.addColorStop(0, 'rgba(12, 6, 20, 0)');
+  vignette.addColorStop(0.72, 'rgba(12, 6, 20, 0)');
+  vignette.addColorStop(1, 'rgba(12, 6, 20, 0.30)');
+  ctx.fillStyle = vignette;
+  ctx.fillRect(0, 0, w, h);
+
+  if (typeof document !== 'undefined') {
+    ctx.save();
+    ctx.globalCompositeOperation = 'overlay';
+    ctx.globalAlpha = 0.055;
+    ctx.fillStyle = ctx.createPattern(getGrainTile(), 'repeat');
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+  }
+}
+
 /** Fits the title font size so the words span most of the poster width on one line. */
 function fitTitleSize(ctx, text, maxWidth, startSize) {
   let size = startSize;
@@ -172,6 +236,9 @@ export function drawPoster(ctx, w, h, state) {
       ctx.textBaseline = 'alphabetic';
     }
   }
+
+  // The finish goes over everything drawn so far, the lettering included.
+  drawFinish(ctx, w, h);
 
   // Editor-only: outline the panel being adjusted.
   if (state.activePanel >= 0 && rects[state.activePanel]) {
