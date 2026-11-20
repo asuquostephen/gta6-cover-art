@@ -43,6 +43,7 @@ const els = {
   exportBtn: document.getElementById('export'),
   fillAll: document.getElementById('fill-all'),
   clearPanel: document.getElementById('clear-panel'),
+  shuffle: document.getElementById('shuffle-panels'),
   sampleBtn: document.getElementById('load-samples'),
   status: document.getElementById('status'),
 };
@@ -175,6 +176,29 @@ els.clearPanel.addEventListener('click', () => {
   p.img = null; p.panX = 0; p.panY = 0; p.zoom = 1;
   syncZoom();
   render();
+});
+els.shuffle.addEventListener('click', () => {
+  // Deal the photos into new panels: only each panel's img moves — panX, panY and zoom stay
+  // with the panel they were tuned on, so a crop that was framed for the top-left cell is
+  // still framed the same way, it just frames a different photo now.
+  const images = state.panels.map((p) => p.img);
+  if (!images.some(Boolean)) { say('Add a photo first, then shuffle the panels.'); return; }
+  const distinct = new Set(images);
+  if (distinct.size < 2) { say('Every panel shows the same photo — nothing to shuffle yet.'); return; }
+  // Fisher–Yates, retried a few times so the click never lands on the arrangement already
+  // on screen when a different one exists.
+  let shuffled = images;
+  for (let attempt = 0; attempt < 12; attempt++) {
+    shuffled = images.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    if (shuffled.some((img, i) => img !== images[i])) break;
+  }
+  state.panels.forEach((p, i) => { p.img = shuffled[i]; });
+  render();
+  say('Shuffled — the photos moved panels, each panel kept its own pan and zoom.');
 });
 els.sampleBtn.addEventListener('click', async () => {
   for (const name of ['pier', 'boulevard']) {

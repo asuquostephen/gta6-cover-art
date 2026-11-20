@@ -18,10 +18,14 @@ sample photos bundled under `app/samples/` were made for make.fun and are free t
   photo then a panel number to place it, or fill all six panels with one photo (each panel gets a
   slightly different crop, like a real cover shoot).
 - **Per-panel crop and position** — drag inside a panel to pan its photo; a zoom slider per panel.
+- **Shuffle panels** — one click randomly reassigns your photos across the six panels, while
+  each panel keeps its own pan and zoom, so a framed crop stays framed — it just frames a
+  different photo. Keep clicking for a fresh layout every time.
 - **Caption editor** — a big title in bold condensed poster lettering with an accent shadow and
   black keyline, plus a tagline in an accent pill.
-- **Four colour grades** — Vice Sunset, Neon Nights, Beach Day and Midnight Crime, applied as
-  canvas filters plus gradient washes; optional halftone print dots and comic edge shading.
+- **Five colour grades** — Vice Sunset, Neon Nights, Beach Day, Midnight Crime and Golden Hour
+  (warm amber highlights over deep teal shadows), applied as canvas filters plus gradient
+  washes; optional halftone print dots and comic edge shading.
 - **Post sizes** — export a PNG at 1080 × 1080, 1080 × 1350 or 1920 × 1080. The preview canvas is
   kept at full export resolution, so what you see is exactly what downloads.
 - **Offline and private** — plain static files, no build step, no network requests; photos are

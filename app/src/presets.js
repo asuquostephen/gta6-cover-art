@@ -40,6 +40,18 @@ export const PRESETS = {
     accent2: '#334155',
     emptyPanel: ['#05070f', '#1c2440'],
   },
+  golden: {
+    label: 'Golden Hour',
+    // Warm amber light on the highlights — a touch of sepia and a warm hue shift over lifted
+    // saturation — while the scrims and empty panels below stay in deep teal, so the shadows
+    // read cool against the glow: the last ten minutes before the streetlights come on.
+    filter: 'saturate(1.34) contrast(1.16) brightness(1.08) sepia(0.24) hue-rotate(-8deg)',
+    topScrim: 'rgba(6, 42, 46, 0.58)',
+    bottomGlow: ['rgba(255, 176, 66, 0)', 'rgba(255, 138, 31, 0.52)'],
+    accent: '#ffb020',
+    accent2: '#2dd4bf',
+    emptyPanel: ['#042f2e', '#b45309'],
+  },
 };
 
-export const PRESET_ORDER = ['vice', 'neon', 'beach', 'midnight'];
+export const PRESET_ORDER = ['vice', 'neon', 'beach', 'midnight', 'golden'];
