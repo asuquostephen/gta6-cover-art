@@ -3,9 +3,10 @@
 // drawing: a multi-panel collage in the spirit of big-city crime-movie posters, a colour grade
 // from the chosen preset, optional halftone dots and comic edge darkening, then the caption in
 // heavy condensed lettering across the top. Everything is drawn with canvas primitives and the
-// visitor's own photos — no artwork, logo or font file from anyone else's game. The last pass
-// over the sheet is a finish: a soft vignette plus a deterministic film grain, so the flat
-// digital colour reads as a printed poster.
+// visitor's own photos — no artwork, logo or font file from anyone else's game. A preset that
+// carries duotone inks (Duotone Noir) then re-inks the whole sheet in those two colours, and
+// the last pass over the sheet is a finish: a soft vignette plus a deterministic film grain,
+// so the flat digital colour reads as a printed poster.
 
 import { PRESETS } from './presets.js';
 
@@ -93,6 +94,36 @@ function drawPanelShade(ctx, rect) {
   ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
 }
 
+/** Parses a '#rrggbb' colour into its [r, g, b] bytes. */
+function hexRgb(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+/**
+ * The duotone pass: re-inks the sheet painted so far — panels, washes, halftone and
+ * lettering alike — in the preset's two inks. Each pixel's luminance (Rec. 709 weights)
+ * becomes its position on the straight ramp between the ink colour (luminance 0) and the
+ * paper colour (luminance 1); alpha is left alone. It is a pure function of the pixels on
+ * the canvas — no seed, no clock, no preset state beyond the two ink colours — so the same
+ * poster always re-inks to the same sheet. Runs after the grade (the preset's canvas
+ * filter, applied per panel as the photos were drawn) and before the finish, so the
+ * vignette and grain sit on the two-ink sheet exactly as they sit on every colour grade.
+ */
+function drawDuotone(ctx, w, h, duotone) {
+  const ink = hexRgb(duotone.ink);
+  const paper = hexRgb(duotone.paper);
+  const img = ctx.getImageData(0, 0, w, h);
+  const d = img.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const t = (0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]) / 255;
+    d[i] = ink[0] + (paper[0] - ink[0]) * t;
+    d[i + 1] = ink[1] + (paper[1] - ink[1]) * t;
+    d[i + 2] = ink[2] + (paper[2] - ink[2]) * t;
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
 /** A fixed-seed PRNG (mulberry32): the grain must come out identical on every render, so the
  *  poster a visitor exports is the poster they saw, whatever machine or moment it is drawn in. */
 function seededRandom(seed) {
@@ -133,7 +164,7 @@ function getGrainTile() {
  * The finish pass, painted last over the whole graded poster — lettering included, the
  * editor's dashed highlight excluded: a soft vignette pulls the corners down, then a whisper
  * of film grain is tiled over everything in overlay blend. Neither half looks at the preset
- * (fixed gradient stops, fixed grain seed), so the finish sits the same on all five grades.
+ * (fixed gradient stops, fixed grain seed), so the finish sits the same on all six grades.
  */
 function drawFinish(ctx, w, h) {
   const cx = w / 2;
@@ -236,6 +267,13 @@ export function drawPoster(ctx, w, h, state) {
       ctx.textBaseline = 'alphabetic';
     }
   }
+
+  // A duotone grade re-inks the whole sheet — photos, washes and lettering — in its two
+  // inks before the finish, the way a two-colour print run puts everything on the sheet
+  // through the same pair of plates. The title keeps its shape through its black keyline,
+  // which maps to the ink, while its white fill and paper-coloured shadow merge into the
+  // paper ink, exactly as they would on paper.
+  if (preset.duotone) drawDuotone(ctx, w, h, preset.duotone);
 
   // The finish goes over everything drawn so far, the lettering included.
   drawFinish(ctx, w, h);

@@ -52,6 +52,23 @@ export const PRESETS = {
     accent2: '#2dd4bf',
     emptyPanel: ['#042f2e', '#b45309'],
   },
+  noir: {
+    label: 'Duotone Noir',
+    // A two-ink print job: the filter first takes the photo to a hard black-and-white
+    // (full desaturation, contrast pushed so the mid-tones split), then the renderer
+    // re-inks the whole sheet along the ramp between the two colours named in `duotone`
+    // below — a near-black blue-ink for the shadows, a warm paper cream for the light.
+    // The renderer keys on the presence of `duotone`; no other preset carries one. The
+    // accent is the paper colour itself: on a two-ink sheet the highlight ink is the
+    // loudest colour there is, so the title shadow and subtitle pill print in it.
+    filter: 'grayscale(1) contrast(1.28) brightness(1.04)',
+    topScrim: 'rgba(8, 8, 14, 0.62)',
+    bottomGlow: ['rgba(245, 239, 226, 0)', 'rgba(16, 16, 24, 0.5)'],
+    accent: '#f5efe2',
+    accent2: '#9a97a8',
+    emptyPanel: ['#17171f', '#3a3a48'],
+    duotone: { ink: '#101018', paper: '#f5efe2' },
+  },
 };
 
-export const PRESET_ORDER = ['vice', 'neon', 'beach', 'midnight', 'golden'];
+export const PRESET_ORDER = ['vice', 'neon', 'beach', 'midnight', 'golden', 'noir'];

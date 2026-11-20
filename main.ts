@@ -42,8 +42,10 @@ writeFileSync(join(out, 'dossier.json'), buildDossier(out, {
 
 // The colour grades the app ships ride along in a separate sidecar, presets.json, read
 // straight from the app's own preset table (app/src/presets.js — the very module the editor
-// loads), so the list can never drift from the grades on the Style row. Written through the
-// vendored canonicalJson so it carries the same canonical spelling; dossier.json above is
-// untouched by it.
-const presets = PRESET_ORDER.map((id) => ({ id, name: PRESETS[id].label }));
+// loads), so the list can never drift from the grades on the Style row. Each entry carries
+// the grade's accent colour beside its name: the accent is the colour the grade prints its
+// title shadow and subtitle pill in, so a reader of the sidecar can see each grade's
+// signature colour without opening the app. Written through the vendored canonicalJson so
+// it carries the same canonical spelling; dossier.json above is untouched by it.
+const presets = PRESET_ORDER.map((id) => ({ id, name: PRESETS[id].label, accent: PRESETS[id].accent }));
 writeFileSync(join(out, 'presets.json'), canonicalJson(presets));

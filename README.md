@@ -23,9 +23,14 @@ sample photos bundled under `app/samples/` were made for make.fun and are free t
   different photo. Keep clicking for a fresh layout every time.
 - **Caption editor** — a big title in bold condensed poster lettering with an accent shadow and
   black keyline, plus a tagline in an accent pill.
-- **Five colour grades** — Vice Sunset, Neon Nights, Beach Day, Midnight Crime and Golden Hour
-  (warm amber highlights over deep teal shadows), applied as canvas filters plus gradient
-  washes; optional halftone print dots and comic edge shading.
+- **Six colour grades** — Vice Sunset, Neon Nights, Beach Day, Midnight Crime, Golden Hour
+  (warm amber highlights over deep teal shadows) and Duotone Noir, applied as canvas filters
+  plus gradient washes; optional halftone print dots and comic edge shading. Duotone Noir
+  goes further than a filter: after the grade, the whole sheet — photos, washes and
+  lettering — is re-inked along a two-colour ramp, near-black ink (`#101018`) for the
+  shadows to warm paper (`#f5efe2`) for the light, like a two-colour print run. And
+  whichever grade you pick, the editor remembers it (in your browser's local storage) and
+  opens with it next time.
 - **Post sizes** — export a PNG at 1080 × 1080, 1080 × 1350 or 1920 × 1080. The preview canvas is
   kept at full export resolution, so what you see is exactly what downloads.
 - **Offline and private** — plain static files, no build step, no network requests; photos are

@@ -88,6 +88,7 @@ button:hover { border-color: var(--accent); }
 .preset.active[data-preset="beach"] { border-color: #ffcf3f; box-shadow: 0 0 0 2px #ffcf3f; }
 .preset.active[data-preset="midnight"] { border-color: #7dd3fc; box-shadow: 0 0 0 2px #7dd3fc; }
 .preset.active[data-preset="golden"] { border-color: #ffb020; box-shadow: 0 0 0 2px #ffb020; }
+.preset.active[data-preset="noir"] { border-color: #f5efe2; box-shadow: 0 0 0 2px #f5efe2; }
 .check { flex-direction: row; align-items: center; gap: 8px; font-weight: 600; }
 .check input { width: 17px; height: 17px; accent-color: var(--accent); }
 .export-btn { background: linear-gradient(135deg, var(--accent), #ff7a3f); color: #fff; font-size: 16.5px; padding: 12px; border: 0; }

@@ -12,9 +12,28 @@ export const SIZES = {
   wide: { label: 'Wide 1920 × 1080', w: 1920, h: 1080 },
 };
 
+// The Style row remembers: the grade a visitor picks is kept in localStorage — on their
+// own machine, like the photos, which never leave it either — and the editor opens with
+// that grade next time. Storage can be unavailable (private windows, some file:// setups),
+// so every access is wrapped: an unset, unknown or unreachable value simply falls back to
+// Vice Sunset, the grade the editor has always opened with.
+const PRESET_STORAGE_KEY = 'vice-panels:preset';
+
+function rememberedPreset() {
+  try {
+    const saved = localStorage.getItem(PRESET_STORAGE_KEY);
+    if (saved && PRESETS[saved]) return saved;
+  } catch { /* storage unavailable — the default below stands */ }
+  return 'vice';
+}
+
+function rememberPreset(key) {
+  try { localStorage.setItem(PRESET_STORAGE_KEY, key); } catch { /* see rememberedPreset */ }
+}
+
 const state = {
   panels: Array.from({ length: PANEL_COUNT }, () => ({ img: null, panX: 0, panY: 0, zoom: 1 })),
-  preset: 'vice',
+  preset: rememberedPreset(),
   title: 'VICE HEAT',
   subtitle: 'One city. No brakes.',
   halftone: false,
@@ -139,7 +158,7 @@ function buildPresets() {
     b.className = 'preset' + (key === state.preset ? ' active' : '');
     b.dataset.preset = key;
     b.innerHTML = `<i style="background:linear-gradient(135deg, ${PRESETS[key].accent}, ${PRESETS[key].accent2})"></i>${PRESETS[key].label}`;
-    b.addEventListener('click', () => { state.preset = key; buildPresets(); render(); });
+    b.addEventListener('click', () => { state.preset = key; rememberPreset(key); buildPresets(); render(); });
     els.presets.append(b);
   }
 }
