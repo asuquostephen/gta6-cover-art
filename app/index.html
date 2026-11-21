@@ -3,68 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vice Panels — GTA-Style Cover Art Maker</title>
+<title>Cover Snap</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="brand"><span class="brand-mark">VP</span> Vice Panels</div>
-  <p class="tagline">Your photo + a caption → poster-style cover art, exported as a PNG. Original design, works fully offline.</p>
-</header>
 <main class="app">
-  <section class="controls" aria-label="Cover controls">
-    <div class="group">
-      <h2>1 · Photos</h2>
-      <label class="file-btn">Add photos<input id="photo-input" type="file" accept="image/*" multiple hidden></label>
-      <button id="load-samples" type="button" class="ghost">Use the free samples</button>
-      <div id="tray" class="tray" aria-label="Loaded photos"></div>
-      <p class="hint">Or drag photos straight onto the poster. Click a photo, then a panel number, to place it there.</p>
-    </div>
-    <div class="group">
-      <h2>2 · Panels</h2>
-      <div id="panel-chips" class="chips" aria-label="Choose a panel"></div>
-      <label class="slider">Zoom of the selected panel
-        <input id="zoom" type="range" min="1" max="2.6" step="0.01" value="1">
-      </label>
-      <div class="row">
-        <button id="fill-all" type="button" class="ghost">Fill all panels with one photo</button>
-        <button id="clear-panel" type="button" class="ghost">Clear panel</button>
-      </div>
-      <div class="row">
-        <button id="shuffle-panels" type="button" class="ghost">Shuffle panels</button>
-      </div>
-      <p class="hint">Drag inside any panel on the poster to pan its photo. Shuffle deals the
-        photos into new panels — each panel keeps its own pan and zoom.</p>
-    </div>
-    <div class="group">
-      <h2>3 · Caption</h2>
-      <label>Big title <input id="title-input" type="text" maxlength="26" value="VICE HEAT"></label>
-      <label>Tagline <input id="subtitle-input" type="text" maxlength="44" value="One city. No brakes."></label>
-    </div>
-    <div class="group">
-      <h2>4 · Style</h2>
-      <div id="preset-row" class="presets"></div>
-      <label class="check"><input id="halftone" type="checkbox"> Halftone print dots</label>
-      <label class="check"><input id="edges" type="checkbox" checked> Comic edge shading</label>
-      <p class="hint">Six grades, from sunset colour to two-ink Duotone Noir. The app
-        remembers the grade you picked and opens with it next time.</p>
-    </div>
-    <div class="group">
-      <h2>5 · Export</h2>
-      <label>Post size
-        <select id="size-select">
-          <option value="square">Square — 1080 × 1080</option>
-          <option value="portrait" selected>Portrait — 1080 × 1350</option>
-          <option value="wide">Wide — 1920 × 1080</option>
-        </select>
-      </label>
-      <button id="export" type="button" class="export-btn">Export PNG</button>
-      <p id="status" role="status"></p>
-    </div>
+  <section class="controls">
+    <h1>Cover Snap</h1>
+    <p>A photo and a caption, made into a square cover.</p>
+    <label>Photo <input id="photo" type="file" accept="image/*"></label>
+    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
+    <button id="export" type="button">Export PNG 1080 x 1080</button>
+    <p id="status" role="status"></p>
   </section>
-  <section id="stage" class="stage" aria-label="Poster preview">
-    <canvas id="poster" width="1080" height="1350" aria-label="Your cover art preview"></canvas>
-  </section>
+  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>
