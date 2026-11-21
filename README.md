@@ -1,8 +1,8 @@
 # Vice Panels — GTA-Style Cover Art Maker
 
-![Competition badge](https://make.fun/badge/gta6-cover-art-01.svg)
-![Rank badge](https://make.fun/badge/gta6-cover-art-01/asuquostephen/gta6-cover-art/rank.svg)
-![Reward badge](https://make.fun/badge/gta6-cover-art-01/asuquostephen/gta6-cover-art/reward.svg)
+[![make.fun · gta6-cover-art-01](https://make.fun/badge/gta6-cover-art-01.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
+[![rank](https://make.fun/badge/gta6-cover-art-01/asuquostephen/gta6-cover-art/rank.svg)](https://make.fun/bounty/gta6-cover-art-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
+[![reward](https://make.fun/badge/gta6-cover-art-01/asuquostephen/gta6-cover-art/reward.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
 
 Vice Panels turns your own photos and a caption into bold, six-panel
 poster art in the spirit of classic game-cover collages — white keylines
@@ -11,7 +11,7 @@ drawn live on the canvas. It is an original design: no third-party
 logos, artwork, characters, or font files are included, and all
 lettering uses system font stacks rendered by the canvas itself.
 
-Competition page: https://make.fun/c/gta6-cover-art-01
+Competition page: https://make.fun/bounty/gta6-cover-art-01
 
 ## What it does
 
