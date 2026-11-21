@@ -3,21 +3,83 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
-<link rel="stylesheet" href="./style.css">
+<title>Vice Panels — GTA-Style Cover Art Maker</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
-  </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
-</main>
-<script type="module" src="./src/main.js"></script>
+<div id="app" class="app-shell">
+  <aside class="sidebar">
+    <header class="brand">
+      <p class="brand-kicker">Cover Art Maker</p>
+      <h1>Vice Panels</h1>
+      <p class="brand-sub">Turn your photos into a six-panel poster with bold lettering and a sunset grade. Everything runs on your machine — photos never leave this page.</p>
+    </header>
+
+    <section class="control-group">
+      <h2>1 · Photos</h2>
+      <label class="file-btn" for="fileInput">Add Photos</label>
+      <input id="fileInput" type="file" accept="image/*" multiple hidden>
+      <p id="dropHint" class="hint">Drag photos here, or use Add Photos</p>
+      <div id="tray" class="tray" aria-label="Photo tray"></div>
+      <button id="fillOneBtn" type="button" class="wide-btn">Fill every panel with one photo</button>
+      <p class="hint">Tip: click a tray photo to arm it, then click a panel to place it.</p>
+    </section>
+
+    <section class="control-group">
+      <h2>2 · Panels</h2>
+      <div id="panelChips" class="panel-chips"></div>
+      <p id="selectedInfo" class="hint">Panel 1 selected</p>
+      <label class="slider-row" for="zoomRange">
+        <span>Zoom <strong id="zoomValue">100%</strong></span>
+        <input id="zoomRange" type="range" min="100" max="300" value="100" step="1">
+      </label>
+      <button id="clearPanelBtn" type="button" class="wide-btn ghost">Clear selected panel</button>
+      <button id="shuffleBtn" type="button" class="wide-btn">Shuffle panel crops</button>
+      <p class="hint">Drag inside a filled panel to pan its photo. Keys 1–6 select panels.</p>
+    </section>
+
+    <section class="control-group">
+      <h2>3 · Caption &amp; Grade</h2>
+      <label class="field" for="titleInput">
+        <span>Title</span>
+        <input id="titleInput" type="text" maxlength="40" value="Vice Panels" autocomplete="off">
+      </label>
+      <label class="field" for="taglineInput">
+        <span>Tagline</span>
+        <input id="taglineInput" type="text" maxlength="60" value="Six panels. One legend." autocomplete="off">
+      </label>
+      <label class="field" for="gradeSelect">
+        <span>Colour grade</span>
+        <select id="gradeSelect"></select>
+      </label>
+      <label class="check-row" for="halftoneToggle">
+        <input id="halftoneToggle" type="checkbox">
+        <span>Halftone dot overlay</span>
+      </label>
+      <label class="check-row" for="comicToggle">
+        <input id="comicToggle" type="checkbox" checked>
+        <span>Comic edge shading</span>
+      </label>
+    </section>
+
+    <section class="control-group">
+      <h2>4 · Export</h2>
+      <label class="field" for="sizeSelect">
+        <span>Poster size</span>
+        <select id="sizeSelect"></select>
+      </label>
+      <button id="exportBtn" type="button" class="export-btn">Export PNG</button>
+      <p class="hint">Downloads the poster at full resolution. Press E to export.</p>
+    </section>
+  </aside>
+
+  <main id="stage" class="stage">
+    <div class="canvas-wrap">
+      <canvas id="posterCanvas" width="1080" height="1080" aria-label="Poster preview"></canvas>
+    </div>
+    <p class="stage-note">Live preview — the canvas above is the exact file you export, scaled to fit.</p>
+  </main>
+</div>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>
